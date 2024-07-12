@@ -1,0 +1,98 @@
+
+
+services:
+  app:
+    build:
+     context: .
+     dockerfile: Dockerfile
+    container_name: app
+    working_dir: /public
+    volumes:
+            - '.:/public'
+            - ./logs/docker/:/var/log/
+    # depends_on:
+    #   - db
+    environment:
+        TZ: 'America/Sao_Paulo'
+        HTTP_PORT: 9502
+    restart: always
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "curl 127.0.0.1:9502" ]
+    #   interval: 3s
+    #   timeout: 5s
+    #   retries: 10
+    ports:
+      - 9502:9502
+    networks:
+      - default
+
+  db:
+     image: mysql:8.4.0
+     command:  mysqld --max_allowed_packet=256M
+     environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD_ROOT}
+      MYSQL_DATABASE: ${DATABASE_DATABASE}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      TZ: '${DATABASE_TIMEZONE}'
+     volumes:
+      - ./docker/config/mysql/dump:/docker-entrypoint-initdb.d
+      - dbdata:/var/lib/mysql:delegated
+     restart: always
+     ports:
+      - 8001:3306
+     networks:
+      - default
+
+  phpmyadmin:
+     image: phpmyadmin/phpmyadmin
+     container_name: PHPMYADMIN${PROJECT_NAME}
+     deploy:
+      resources:
+        limits:
+          cpus: '${DATABASEMANAGER_CPU_QUANT}'
+          memory: ${DATABASEMANAGER_MEM_QUANT}
+        reservations:
+          cpus: '${DATABASEMANAGER_CPU_RESERV}'
+          memory: ${DATABASEMANAGER_MEM_RESERV}
+     environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      TZ: '${DATABASE_TIMEZONE}'
+     restart: always
+     ports:
+      - 8005:80
+     networks:
+      - default
+
+# postgres:15.3-alpine
+  # db:
+  #   image: postgres:latest
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: app_db
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./docker/config/postgres/config/postgresql.conf:/etc/postgresql/postgresql.conf
+  #     - ./docker/config/postgres/dump/postgres:/docker-entrypoint-initdb.d
+  #   command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready"]
+  #     interval: 3s
+  #     timeout: 5s
+  #     retries: 10
+  #   network_mode: host
+
+
+volumes:
+  dbdata:
+    driver: local
+  dbdataMariadb:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+

@@ -1,0 +1,60 @@
+{
+    "name": "slim-f/app",
+    "description": "Mini framework com slim 4, swoole e  eloquent - Natanyel Henrique Carvalho Eduardo Monteiro Monteiro",
+    "scripts": {
+        "make:openapi": "cd ./libs/swagger && php autogen.php",
+        "test": "./vendor/bin/phpunit --colors=always",
+        "test:coverage": "./vendor/bin/phpunit --coverage-html ./app/src/Tests/coverage",
+        "test:debug": "./vendor/bin/phpunit --colors=always --coverage-html ./app/src/Tests/coverage --coverage-filter ./app/src --log-junit ./app/src/Tests/logs/junit.xml --testdox",
+        "migrate": "cd ./libs/migrations && php migrate.php",
+        "migrate-fresh": "cd ./libs/migrations && php migrate-fresh.php",
+        "migrate-install": "cd ./libs/migrations && php migrate-install.php",
+        "migrate-refresh": "cd ./libs/migrations && php migrate-refresh.php",
+        "migrate-reset": "cd ./libs/migrations && php migrate-reset.php",
+        "migrate-rollback": "cd ./libs/migrations && php migrate-rollback.php",
+        "migrate-status": "cd ./libs/migrations && php migrate-status.php",
+        "migrate-all": [
+            "cd ./libs/migrations && php migrate.php all"
+        ],
+        "migrate-rollback-latest": [
+            "@migrate-rollback"
+        ]
+    },
+    "autoload": {
+        "files": [
+            "./app/src/Helpers/constants.php"
+        ],
+        "psr-4": {
+            "App\\": "app/src/",
+            "Lib\\": "libs/",
+            "Tests\\": "app/Tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Natanyel Henrique Carvalho Eduardo Monteiro Monteiro"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "6.9.1",
+        "firebase/php-jwt": "6.10.1",
+        "ext-json": "*",
+        "monolog/monolog": "3.4",
+        "nyholm/psr7": "1.8.1",
+        "slim/slim": "4.14",
+        "imefisto/psr-swoole-native": "1.1.3",
+        "swoole/ide-helper": "5.0.3",
+        "slim/psr7": "1.6.1",
+        "php-di/php-di": "7.0.5",
+        "illuminate/database": "11.13.0",
+        "illuminate/pagination": "11.13.0",
+        "ramsey/uuid": "4.7",
+        "zircote/swagger-php": "^4.8",
+        "illuminate/filesystem": "^11.15",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "11.2",
+        "phpstan/phpstan": "^1.10"
+    }
+}
