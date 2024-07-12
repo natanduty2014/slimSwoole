@@ -17,7 +17,7 @@ class phpmailerSend
             $mailer->Host = 'smtp.exemplo.com.br'; // EndereÃ§o do servidor SMTP
             $mailer->SMTPAuth = true;
             $mailer->Username = 'naoresponder@exemplo.com.br'; // UsuÃ¡rio do SMTP
-            $mailer->Password = 'l&Ll)Mp2'; // Senha do SMTP
+            $mailer->Password = '*****'; // Senha do SMTP
             $mailer->SMTPSecure = 'ssl';
             $mailer->Port = 465; // Porta TCP para conexÃ£o
             $mailer->CharSet = 'UTF-8';
